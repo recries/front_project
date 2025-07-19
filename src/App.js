@@ -31,14 +31,14 @@ const App = () => {
                                     <Route path="/UseList" element={<UseList/>}/>
                                 </Routes>
                             </main>
-                            <footer className="py-4 bg-light mt-auto">
-                                <div className="container-fluid px-4">
-                                    <div className="d-flex align-items-center justify-content-between small">
-                                        <div className="text-muted">Copyright &copy; Your Website 2023</div>
+                            <footer className="custom-footer">
+                                <div className="custom-container-fluid">
+                                                                        <div className="custom-display-flex custom-align-items-center custom-justify-content-between custom-small">
+                                        <div className="custom-text-muted">Copyright &copy; Your Website 2023</div>
                                         <div>
-                                            <a href="#">Privacy Policy</a>
+                                            <Link to="/privacy-policy">Privacy Policy</Link>
                                             &middot;
-                                            <a href="#">Terms &amp; Conditions</a>
+                                            <Link to="/terms-conditions">Terms &amp; Conditions</Link>
                                         </div>
                                     </div>
                                 </div>

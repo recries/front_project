@@ -1,111 +1,160 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import api from '../api/api'; // api.js 파일 임포트
 
 const MainDashboard = () => {
+    const [approvalDocuments, setApprovalDocuments] = useState([]);
+
+    useEffect(() => {
+        // Bar Chart Example
+        const ctxBar = document.getElementById("myBarChart");
+        if (ctxBar) {
+            new window.Chart(ctxBar, {
+                type: 'bar',
+                data: {
+                    labels: ["January", "February", "March", "April", "May", "June"],
+                    datasets: [{
+                        label: "Revenue",
+                        backgroundColor: "rgba(2,117,216,1)",
+                        borderColor: "rgba(2,117,216,1)",
+                        data: [4215, 5312, 6251, 7841, 9821, 14984],
+                    }],
+                },
+                options: {
+                    scales: {
+                        xAxes: [{
+                            time: {
+                                unit: 'month'
+                            },
+                            gridLines: {
+                                display: false
+                            },
+                            ticks: {
+                                maxTicksLimit: 6
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                min: 0,
+                                max: 15000,
+                                maxTicksLimit: 5
+                            },
+                            gridLines: {
+                                display: true
+                            }
+                        }],
+                    },
+                    legend: {
+                        display: false
+                    }
+                }
+            });
+        }
+
+        // Area Chart Example
+        const ctxArea = document.getElementById("myAreaChart");
+        if (ctxArea) {
+            new window.Chart(ctxArea, {
+                type: 'line',
+                data: {
+                    labels: ["Mar 1", "Mar 2", "Mar 3", "Mar 4", "Mar 5", "Mar 6", "Mar 7", "Mar 8", "Mar 9", "Mar 10", "Mar 11", "Mar 12", "Mar 13"],
+                    datasets: [{
+                        label: "Sessions",
+                        lineTension: 0.3,
+                        backgroundColor: "rgba(2,117,216,0.2)",
+                        borderColor: "rgba(2,117,216,1)",
+                        pointRadius: 5,
+                        pointBackgroundColor: "rgba(2,117,216,1)",
+                        pointBorderColor: "rgba(255,255,255,0.8)",
+                        pointHoverRadius: 5,
+                        pointHoverBackgroundColor: "rgba(2,117,216,1)",
+                        pointHitRadius: 50,
+                        pointBorderWidth: 2,
+                        data: [10000, 30162, 26263, 18394, 18287, 28682, 31274, 33259, 25849, 24159, 32651, 31984, 38451],
+                    }],
+                },
+                options: {
+                    scales: {
+                        xAxes: [{
+                            time: {
+                                unit: 'date'
+                            },
+                            gridLines: {
+                                display: false
+                            },
+                            ticks: {
+                                maxTicksLimit: 7
+                            }
+                        }],
+                        yAxes: [{
+                            ticks: {
+                                min: 0,
+                                max: 40000,
+                                maxTicksLimit: 5
+                            },
+                            gridLines: {
+                                color: "rgba(0, 0, 0, .125)",
+                            }
+                        }],
+                    },
+                    legend: {
+                        display: false
+                    }
+                }
+            });
+        }
+
+        // Fetch approval documents
+        const fetchApprovalDocuments = async () => {
+            try {
+                const response = await api.get('/approval-documents');
+                setApprovalDocuments(response.data);
+            } catch (error) {
+                console.error('Error fetching approval documents:', error);
+            }
+        };
+
+        fetchApprovalDocuments();
+    }, []);
+
     return (
         <div className="container-fluid px-4">
-            <h1 className="mt-4">오늘의 소비지수</h1>
-            <ol className="breadcrumb mb-4">
-                <li className="breadcrumb-item active"></li>
-            </ol>
-            <div className="row">
-                <div className="col-xl-3 col-md-6">
-                    <div className="card bg-primary text-white mb-4">
-                        <div className="card-body">많이 아꼈어요!</div>
-                        <div
-                            className="card-footer d-flex align-items-center justify-content-between">
-                            <div className="input-group mb-3">
-                                <span className="input-group-text bg-primary">$</span>
-                                <input type="text" className="form-control"
-                                       aria-label="Amount (to the nearest dollar)"/>
-                                <span className="input-group-text bg-primary"><i
-                                    className="fas fa-angle-right"></i></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-xl-3 col-md-6">
-                    <div className="card bg-success text-white mb-4">
-                        <div className="card-body">적당히 사용했어요!</div>
-                        <div
-                            className="card-footer d-flex align-items-center justify-content-between">
-                            <div className="input-group mb-3">
-                                <span className="input-group-text bg-success">$</span>
-                                <input type="text" className="form-control"
-                                       aria-label="Amount (to the nearest dollar)"/>
-                                <span className="input-group-text bg-success"><i
-                                    className="fas fa-angle-right"></i></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-xl-3 col-md-6">
-                    <div className="card bg-warning text-white mb-4">
-                        <div className="card-body">조금 많이썼어요..</div>
-                        <div
-                            className="card-footer d-flex align-items-center justify-content-between">
-                            <div className="input-group mb-3">
-                                <span className="input-group-text bg-warning">$</span>
-                                <input type="text" className="form-control"
-                                       aria-label="Amount (to the nearest dollar)"/>
-                                <span className="input-group-text bg-warning"><i
-                                    className="fas fa-angle-right"></i></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-xl-3 col-md-6">
-                    <div className="card bg-danger text-white mb-4">
-                        <div className="card-body">낭비를 했어요...</div>
-                        <div
-                            className="card-footer d-flex align-items-center justify-content-between">
-                            <div className="input-group mb-3">
-                                <span className="input-group-text bg-danger">$</span>
-                                <input type="text" className="form-control"
-                                       aria-label="Amount (to the nearest dollar)"/>
-                                <span className="input-group-text bg-danger"><i
-                                    className="fas fa-angle-right"></i></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="row">
-                <div className="col-xl-6">
-                    <div className="card mb-4">
-                        <div className="card-header">
-                            <i className="fas fa-chart-area me-1"></i>
+            <div className="chartLayout" >
+                <div className="custom-col-6">
+                    <div className="custom-card custom-margin-bottom-4">
+                        <div className="custom-card-header">
+                            <i className="fas fa-chart-area custom-margin-end-1"></i>
                             소비 그래프
                         </div>
-                        <div className="card-body">
+                        <div className="custom-card-body">
                             <canvas id="myAreaChart" width="100%" height="40"></canvas>
                         </div>
                     </div>
                 </div>
-                <div className="col-xl-6">
-                    <div className="card mb-4">
-                        <div className="card-header">
-                            <i className="fas fa-chart-bar me-1"></i>
+                <div className="custom-col-6">
+                    <div className="custom-card custom-margin-bottom-4">
+                        <div className="custom-card-header">
+                            <i className="fas fa-chart-bar custom-margin-end-1"></i>
                             잔액 그래프
                         </div>
-                        <div className="card-body">
+                        <div className="custom-card-body">
                             <canvas id="myBarChart" width="100%" height="40"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="accordion" id="accordionExample">
-                <div className="accordion-item">
-                    <h2 className="accordion-header">
-                        <button className="accordion-button" type="button"
+            <div className="custom-accordion" id="accordionExample">
+                <div className="custom-accordion-item">
+                    <h2 className="custom-accordion-header">
+                        <button className="custom-accordion-button" type="button"
                                 data-bs-toggle="collapse" data-bs-target="#collapseOne"
                                 aria-expanded="true" aria-controls="collapseOne">
                             2025-05-02 거래내역
                         </button>
                     </h2>
-                    <div id="collapseOne" className="accordion-collapse collapse show"
+                    <div id="collapseOne" className="custom-accordion-collapse collapse show"
                          data-bs-parent="#accordionExample">
-                        <div className="accordion-body">
+                        <div className="custom-accordion-body">
                             <strong>This is the first item's accordion body.</strong> It is
                             shown by default, until the collapse plugin adds the appropriate
                             classes that we use to style each element. These classes control the
@@ -117,17 +166,17 @@ const MainDashboard = () => {
                         </div>
                     </div>
                 </div>
-                <div className="accordion-item">
-                    <h2 className="accordion-header">
-                        <button className="accordion-button collapsed" type="button"
+                <div className="custom-accordion-item">
+                    <h2 className="custom-accordion-header">
+                        <button className="custom-accordion-button collapsed" type="button"
                                 data-bs-toggle="collapse" data-bs-target="#collapseTwo"
                                 aria-expanded="false" aria-controls="collapseTwo">
                             Accordion Item #2
                         </button>
                     </h2>
-                    <div id="collapseTwo" className="accordion-collapse collapse"
+                    <div id="collapseTwo" className="custom-accordion-collapse collapse"
                          data-bs-parent="#accordionExample">
-                        <div className="accordion-body">
+                        <div className="custom-accordion-body">
                             <strong>This is the second item's accordion body.</strong> It is
                             hidden by default, until the collapse plugin adds the appropriate
                             classes that we use to style each element. These classes control the
@@ -139,17 +188,17 @@ const MainDashboard = () => {
                         </div>
                     </div>
                 </div>
-                <div className="accordion-item">
-                    <h2 className="accordion-header">
-                        <button className="accordion-button collapsed" type="button"
+                <div className="custom-accordion-item">
+                    <h2 className="custom-accordion-header">
+                        <button className="custom-accordion-button collapsed" type="button"
                                 data-bs-toggle="collapse" data-bs-target="#collapseThree"
                                 aria-expanded="false" aria-controls="collapseThree">
                             Accordion Item #3
                         </button>
                     </h2>
-                    <div id="collapseThree" className="accordion-collapse collapse"
+                    <div id="collapseThree" className="custom-accordion-collapse collapse"
                          data-bs-parent="#accordionExample">
-                        <div className="accordion-body">
+                        <div className="custom-accordion-body">
                             <strong>This is the third item's accordion body.</strong> It is
                             hidden by default, until the collapse plugin adds the appropriate
                             classes that we use to style each element. These classes control the
@@ -163,56 +212,25 @@ const MainDashboard = () => {
                 </div>
             </div>
 
-            <div className="card mb-4">
-                <div className="card-header">
-                    <i className="fas fa-table me-1"></i>
-                    DataTable Example
+            <div className="custom-card custom-margin-bottom-4">
+                <div className="custom-card-header">
+                    <i className="fas fa-table custom-margin-end-1"></i>
+                    내가 할 일 (결재 대기 문서)
                 </div>
-                <div className="card-body">
-                    <table id="datatablesSimple">
+                <div className="custom-card-body">
+                    <table className="custom-table custom-table-bordered">
                         <thead>
                         <tr>
-                            <th>Name</th>
-                            <th>Position</th>
-                            <th>Office</th>
-                            <th>Age</th>
-                            <th>Start date</th>
-                            <th>Salary</th>
+                            <th>기안일</th>
+                            <th>문서 종류</th>
+                            <th>제목</th>
+                            <th>기안자</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>Tiger Nixon</td>
-                            <td>System Architect</td>
-                            <td>Edinburgh</td>
-                            <td>61</td>
-                            <td>2011/04/25</td>
-                            <td>$320,800</td>
-                        </tr>
-                        <tr>
-                            <td>Garrett Winters</td>
-                            <td>Accountant</td>
-                            <td>Tokyo</td>
-                            <td>63</td>
-                            <td>2011/07/25</td>
-                            <td>$170,750</td>
-                        </tr>
-                        <tr>
-                            <td>Ashton Cox</td>
-                            <td>Junior Technical Author</td>
-                            <td>San Francisco</td>
-                            <td>66</td>
-                            <td>2009/01/12</td>
-                            <td>$86,000</td>
-                        </tr>
-                        <tr>
-                            <td>Cedric Kelly</td>
-                            <td>Senior Javascript Developer</td>
-                            <td>Edinburgh</td>
-                            <td>22</td>
-                            <td>2012/03/29</td>
-                            <td>$433,060</td>
-                        </tr>
+                        {approvalDocuments.map((doc) => (
+                            <tr key={doc.doc_id}><td>{new Date(doc.created_at).toLocaleDateString()}</td><td>{doc.category_id}</td>{/* TODO: category_id를 category_name으로 변환 필요 */}<td><a href={`/approval-documents/${doc.doc_id}`}>{doc.title}</a></td><td>{doc.drafter_id}</td>{/* TODO: drafter_id를 drafter_name으로 변환 필요 */}</tr>
+                        ))}
                         </tbody>
                     </table>
                 </div>
